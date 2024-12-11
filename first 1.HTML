@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Scanner</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #d4fc79, #96e6a1); /* Light green gradient */
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background: #4caf50; /* Green */
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 10%;
+            background: url('https://source.unsplash.com/1600x900/?nature,green') center/cover no-repeat;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        .hero button {
+            background: #4caf50; /* Green */
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .hero button:hover {
+            background: #45a049;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 50px 10%;
+        }
+
+        .feature {
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .feature img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature h3 {
+            margin-top: 15px;
+            font-size: 1.5rem;
+        }
+
+        .feature p {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 10%;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Text Scanner</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Scan Your Text in Style</h2>
+        <p>Our cutting-edge text scanner ensures accuracy and convenience.</p>
+        <!-- Link to local file red.HTML -->
+        <button onclick="window.location.href='file:///C:/Users/HP/OneDrive%20-%20Chargepal/Desktop/HTML/red.HTML'">Get Started</button>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <img src="https://source.unsplash.com/400x300/?scanner" alt="Text Scanning">
+            <h3>Text Recognition</h3>
+            <p>Accurately scan and detect text with our intuitive tool.</p>
+        </div>
+        <div class="feature">
+            <img src="https://source.unsplash.com/400x300/?technology" alt="Advanced Features">
+            <h3>Advanced Technology</h3>
+            <p>Experience the power of advanced OCR in a user-friendly interface.</p>
+        </div>
+        <div class="feature">
+            <img src="https://source.unsplash.com/400x300/?cloud" alt="Cloud Integration">
+            <h3>Cloud Integration</h3>
+            <p>Save and manage your scans directly in the cloud.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Text Scanner. All rights reserved.</p>
+    </footer>
+</body>
+</html>

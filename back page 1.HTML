@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #eaffd0, #ffffff);
+        }
+
+        .emoji-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 250px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-box span {
+            font-size: 5rem; /* Bigger size for emojis */
+            margin: 0 10px;
+        }
+
+        .status-text {
+            margin-top: 20px;
+            font-size: 2.5rem; /* Slightly larger text */
+            font-weight: bold;
+            color: #007f00;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="emoji-box">
+        <span title="Smile Emoji">😊</span>
+        <span title="Thumbs Up">👍</span>
+    </div>
+    <div class="status-text" id="statusText">
+        The product is NOT expired!
+    </div>
+
+    <script>
+        // Function to play the voice automatically when the page loads
+        function speakText() {
+            const text = document.getElementById('statusText').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US'; // Set language to English (US)
+
+            // Find a polite, female voice if available
+            const voices = speechSynthesis.getVoices();
+            const femaleVoice = voices.find(voice => voice.name.includes('Female') || voice.gender === 'female') || voices[0];
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+
+            utterance.pitch = 1.2; // Slightly higher pitch for a polite tone
+            utterance.rate = 0.8;   // Slower speed (default is 1, reducing to 0.8 for slower speech)
+            speechSynthesis.speak(utterance);
+        }
+
+        // Ensure voices are loaded before speaking
+        function initializeSpeech() {
+            const voicesLoaded = () => {
+                speechSynthesis.removeEventListener('voiceschanged', voicesLoaded);
+                speakText(); // Speak after voices are ready
+            };
+
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.addEventListener('voiceschanged', voicesLoaded);
+            } else {
+                speakText(); // Speak immediately if voices are already loaded
+            }
+        }
+
+        // Try to auto-play sound after page load
+        window.onload = () => {
+            try {
+                initializeSpeech();
+            } catch (e) {
+                // If voice doesn't play automatically, notify the user
+                console.log('Voice synthesis failed to trigger automatically, please interact with the page first.');
+                alert('Click anywhere on the page to hear the message!');
+            }
+        };
+
+        // Add a listener for user interaction to play voice if needed
+        document.body.addEventListener('click', () => {
+            initializeSpeech(); // Trigger the voice when user clicks
+        });
+    </script>
+</body>
+</html>

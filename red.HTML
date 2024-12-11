@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera OCR and Expiry Date Checker</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.4/dist/tesseract.min.js"></script>
+  <style>
+    #camera {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    #capture-button {
+      margin-top: 10px;
+    }
+    #status {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+    #ocr-text {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Camera OCR and Expiry Date Checker</h1>
+  <video id="camera" autoplay></video>
+  <button id="capture-button">Capture Photo</button>
+  <div id="ocr-text"></div> <!-- Display the full OCR result -->
+  <div id="status"></div>
+
+  <script>
+    const videoElement = document.getElementById('camera');
+    const captureButton = document.getElementById('capture-button');
+    const statusDiv = document.getElementById('status');
+    const ocrTextDiv = document.getElementById('ocr-text');
+
+    // Access the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        videoElement.srcObject = stream;
+      })
+      .catch(err => {
+        console.error('Error accessing camera: ', err);
+        statusDiv.innerText = 'Error accessing camera.';
+      });
+
+    // Capture photo function
+    captureButton.addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+      // Perform OCR with Tesseract.js
+      Tesseract.recognize(
+        canvas.toDataURL(),
+        'eng',
+        { logger: (m) => console.log(m) }  // Log the OCR progress
+      ).then(({ data: { text } }) => {
+        console.log('OCR Text:', text);  // Log the full OCR result to check what was extracted
+
+        // Display the full OCR text
+        ocrTextDiv.innerText = 'Scanned Text:\n' + text;
+
+        // Extract and check the expiration date from the text
+        const expiryDate = extractExpiryDate(text);
+        if (expiryDate) {
+          const isExpired = checkExpiry(expiryDate);
+          // Fixed string interpolation here
+          statusDiv.innerText = `Expiry Date: ${expiryDate}\nExpired: ${isExpired ? 'Yes' : 'No'}`;
+        } else {
+          statusDiv.innerText = 'No expiration date found.';
+        }
+      }).catch((error) => {
+        console.error('OCR Error:', error);
+        statusDiv.innerText = 'Error processing the image with OCR.';
+      });
+    });
+
+    // Function to extract the expiration date after 'EXP'
+    function extractExpiryDate(text) {
+      // Regex pattern to find "EXP" followed by a date in MM/YYYY format
+      const expiryPattern = /EXP[\s:]*([\d]{2}\/[\d]{4})/i;  // Match "EXP" followed by optional spaces or colon and then MM/YYYY
+      const match = text.match(expiryPattern);
+
+      if (match) {
+        console.log('Extracted Date:', match[1]); // Log the extracted date
+        return match[1];  // Return the expiration date in MM/YYYY format
+      } else {
+        console.log('No expiration date found in text');
+        return null;  // Return null if no match is found
+      }
+    }
+
+    // Function to compare expiration date with current date
+    function checkExpiry(expiryDate) {
+      const currentDate = new Date();
+      const [month, year] = expiryDate.split('/');
+      const expiry = new Date(year, month - 1); // Compare month and year only
+      return expiry < currentDate; // Check if the expiry date has passed
+    }
+  </script>
+
+</body>
+</html>
